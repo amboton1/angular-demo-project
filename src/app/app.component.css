@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,200;1,300;1,400&display=swap');
+
+* {
+    font-family: 'Barlow', sans-serif;
+}
+
+h2 {
+    margin-left: 45px;
+}

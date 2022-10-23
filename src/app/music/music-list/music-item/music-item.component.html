@@ -1,0 +1,23 @@
+<div ngClass="card">
+    <a
+    href="#"
+    (click)="onTrackSongClick()"
+    class="list-group-item clearfix">
+    <span class="pull-right">
+        <img
+            [src]="track.imagePath"
+            alt="{{ track.title }}"
+            class="img-responsive"
+            style="max-height: 200px; border-radius: 9px;"
+        >
+    </span>
+    <div class="pull-left">
+        <h4 class="list-group-item-heading"><b style="color: black;">Title</b>: {{ track.title }}</h4>
+        <p class="list-group-item-text"><b style="color: black;">Artist</b>: {{ track.artist }}</p>
+    </div>
+    </a>
+    <div class="btn-group">
+        <button class="button-18" [disabled]="isButtonLocalDisabled" appHighlight (click)="onLocalStorageSave()">Save To Local Storage</button>
+        <button class="button-18" [disabled]="isButtonSessionDisabled" appHighlight (click)="onSessionStorageSave()">Save To Session Storage</button>
+    </div>
+</div>

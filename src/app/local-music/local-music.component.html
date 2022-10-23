@@ -1,0 +1,6 @@
+<section *ngFor="let item of localStorageData" ngClass="local-storage">
+    <div>
+        <img [src]="item.imagePath" alt="{{item.title}}" [ngStyle]="{ 'max-height': '20rem' }">
+        <h2>{{item.title}}</h2>
+    </div>
+</section>
