@@ -1,7 +1,16 @@
+import { EventEmitter, forwardRef, Injectable } from "@angular/core";
 import { Music } from "../music/music.model";
 import { StorageService } from "./storage-service";
 
-export class LocalStorageService extends StorageService {
+@Injectable({
+    providedIn: 'root',
+})
+export class LocalStorageService implements StorageService {
+    trackEvent = new EventEmitter<Music>();
+    localStorageTemp: Music[] = [];
+
+    constructor() {}
+
     getAll(): any[] {
         return [
             new Music('12134q2212', 'bla bla 1asd', 'ammar', 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'),
@@ -16,11 +25,23 @@ export class LocalStorageService extends StorageService {
         ]
     }
 
+    checkStorage(): any {
+        if (localStorage.getItem('local')) {
+            let locals = localStorage.getItem('local');
+            return locals;
+        }
+    }
+
     getItem(key: string) {
         return JSON.parse(localStorage.getItem(key)!);
     }
 
     setItem(key: string, item: any): void {
-        localStorage.setItem(key, JSON.stringify(item));
+        this.localStorageTemp.push(item);
+        const localArrayItems = this.getItem('local');
+        if (localArrayItems) {
+            localStorage.setItem(key, JSON.stringify([...localArrayItems, item]));
+        }
+        else localStorage.setItem(key, JSON.stringify(this.localStorageTemp));
     }
 }

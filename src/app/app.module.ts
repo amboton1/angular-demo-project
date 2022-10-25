@@ -11,6 +11,16 @@ import { HeaderComponent } from './header/header.component';
 import { HighlightDirective } from './shared/highlight.directive';
 import { LocalMusicComponent } from './local-music/local-music.component';
 import { SessionMusicComponent } from './session-music/session-music.component';
+import { LocalStorageService } from './core/local.service';
+import { SessionStorageService } from './core/session.service';
+import { RouterModule, Routes } from '@angular/router';
+import { StorageService } from './core/storage-service';
+
+const appRoutes: Routes = [
+  { path: '', component: MusicComponent },
+  { path: 'local', component: LocalMusicComponent },
+  { path: 'session', component: SessionMusicComponent },
+];
 
 @NgModule({
   declarations: [
@@ -26,9 +36,15 @@ import { SessionMusicComponent } from './session-music/session-music.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [
+    {
+      provide: StorageService,
+      useClass: LocalStorageService
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

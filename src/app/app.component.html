@@ -1,19 +1,5 @@
-<app-header (storageLink)="onStorageLinkClick($event)"></app-header>
+<app-header></app-header>
 
-<!-- <ng-template [ngIf]="track">
-    <app-music-detail [songDetail]="track"></app-music-detail>
-</ng-template> -->
-
-<section [ngSwitch]="link">
-    <div *ngSwitchCase=" 'local' ">
-        <h2>Tracklist stored in localstorage</h2>
-        <app-local-music></app-local-music>
-    </div>
-    <div *ngSwitchCase=" 'session' ">
-        <h2>Tracklist stored in sessionstorage</h2>
-        <app-session-music></app-session-music>
-    </div>
-    <div *ngSwitchDefault>
-        <app-music></app-music>
-    </div>
+<section>
+    <router-outlet></router-outlet>
 </section>

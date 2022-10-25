@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { StorageService } from 'src/app/core/storage.service';
+import { LocalStorageService } from 'src/app/core/local.service';
+import { SessionStorageService } from 'src/app/core/session.service';
 import { Music } from '../../music.model';
 
 @Component({
@@ -9,28 +10,34 @@ import { Music } from '../../music.model';
 })
 export class MusicItemComponent implements OnInit {
   @Input() track!: Music;
+
   isButtonLocalDisabled = false;
   isButtonSessionDisabled = false;
 
-  constructor(private storageService: StorageService) { }
+  constructor(private localStorageService: LocalStorageService, private sessionStorageService: SessionStorageService) { }
 
   ngOnInit() {
-    if (localStorage.getItem('local')) {
-      let locals = localStorage.getItem('local');
+    this.checkStorage();
+  }
+
+  checkStorage() {
+    const locals = this.localStorageService.checkStorage();
+    if (locals) {
       this.disableButtonOnLoad(locals, 'local');
     }
 
-    if (sessionStorage.getItem('session')) {
-      let sessions = sessionStorage.getItem('session');
+    const sessions = this.sessionStorageService.checkStorage();
+    if (sessions) {
       this.disableButtonOnLoad(sessions, 'session');
     }
   }
 
   disableButtonOnLoad(storageType: string | null, storageKey: string) {
     if (typeof storageType === 'string') {
-      const parse = JSON.parse(storageType);
-      for (let index = 0; index < parse.length; index++) {
-        if (parse[index].id === this.track.id) {
+      const parsed = JSON.parse(storageType);
+
+      for (let index = 0; index < parsed.length; index++) {
+        if (parsed[index].id === this.track.id) {
           if (storageKey === 'local') {
             this.isButtonLocalDisabled = true;
           } else {
@@ -41,17 +48,13 @@ export class MusicItemComponent implements OnInit {
     }
   }
 
-  onTrackSongClick() {
-    this.storageService.sendIdOnClick(this.track);
-  }
-
   onLocalStorageSave() {
-    this.storageService.saveOnLocalStorage(this.track);
+    this.localStorageService.setItem('local', this.track);
     this.isButtonLocalDisabled = true;
   }
 
   onSessionStorageSave() {
-    this.storageService.saveOnSessionStorage(this.track);
+    this.sessionStorageService.setItem('session', this.track);
     this.isButtonSessionDisabled = true;
   }
 

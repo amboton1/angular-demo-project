@@ -6,15 +6,9 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  @Output() storageLink = new EventEmitter<any>();
-
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  onNavigationClick(storage: string) {
-    this.storageLink.emit(storage);
   }
 
 }

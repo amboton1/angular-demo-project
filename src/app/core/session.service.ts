@@ -1,7 +1,17 @@
+import { EventEmitter, Injectable } from "@angular/core";
 import { Music } from "../music/music.model";
 import { StorageService } from "./storage-service";
 
-export class SessionStorageService extends StorageService {
+@Injectable({
+    providedIn: 'root',
+})
+
+export class SessionStorageService implements StorageService {
+    trackEvent = new EventEmitter<Music>();
+    sessionStorageTemp: Music[] = [];
+
+    constructor() {}
+
     getAll(): any[] {
         return [
             new Music('12134q2212', 'bla bla 1asd', 'ammar', 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80'),
@@ -16,11 +26,23 @@ export class SessionStorageService extends StorageService {
         ]
     }
 
+    checkStorage(): any {
+        if (sessionStorage.getItem('session')) {
+            let sessions = sessionStorage.getItem('session');
+            return sessions;
+        }
+    }
+
     getItem(key: string) {
         return JSON.parse(sessionStorage.getItem(key)!);
     }
 
     setItem(key: string, item: any): void {
-        sessionStorage.setItem(key, JSON.stringify(item));
+        this.sessionStorageTemp.push(item);
+        const sessionArrayItems = this.getItem('session');
+        if (sessionArrayItems) {
+            sessionStorage.setItem(key, JSON.stringify([...sessionArrayItems, item]));
+        }
+        else sessionStorage.setItem(key, JSON.stringify(this.sessionStorageTemp));
     }
 }
